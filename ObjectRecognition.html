@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="images/jlogo.png">
+    <title>Object Classifier</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap">
+    <style>
+        body {
+            background:
+        linear-gradient(-90deg, rgba(0,0,0,.05) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.05) 1px, transparent 1px), 
+        linear-gradient(-90deg, rgba(0, 0, 0, .04) 1px, transparent 1px),
+        linear-gradient(rgba(0,0,0,.04) 1px, transparent 1px),
+        linear-gradient(transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+        linear-gradient(-90deg, #aaa 1px, transparent 1px),
+        linear-gradient(-90deg, transparent 3px, #f2f2f2 3px, #f2f2f2 78px, transparent 78px),
+        linear-gradient(#aaa 1px, transparent 1px),
+        #f2f2f2;
+    background-size:
+        4px 4px,
+        4px 4px,
+        80px 80px,
+        80px 80px,
+        80px 80px,
+        80px 80px,
+        80px 80px,
+        80px 80px;
+            margin: 0; /* Remove default margin */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Ensure the page takes the full viewport height */
+        }
+
+        .video-container {
+            position: relative;
+            width: 0px; /* Set the desired width for the video container */
+            height: 0px; /* Set the desired height for the video container */
+            
+            
+        }
+
+        #video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            margin: auto;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            
+        }
+
+        #prediction-container {
+            color: white;
+            position: absolute;
+            bottom: 25%; /* Adjust the bottom position as needed */
+            left: center; /* Adjust the left position as needed */
+            background-color: rgba(0, 0, 0, 0.7); /* Optional: Add a semi-transparent background */
+            padding: 10px; /* Optional: Add padding for better visibility */
+            border-radius: 10px; /* Optional: Add rounded corners */
+            font-size: 24px; /* Adjust the font size as needed */
+            font-family: 'Montserrat';
+        }
+        .jmain{
+            position: fixed;
+            font-family: 'Montserrat';
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            background-color: rgb(0, 0, 0);
+            padding: 10px;
+            border-radius: 10px;
+            font-size: 22px;
+            left: 47.5%;
+            top: 25%;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <a href="jarvis.html" class="jmain">GO BACK</a>
+    </div>
+    
+<div class="video-container">
+    <video id="video" autoplay muted playsinline></video>
+</div>
+<div id="prediction-container"></div>
+
+<canvas id="canvas" width="550" height="500"></canvas>
+<div id="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.0.1"></script>
+<script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0"></script>
+
+<script>
+    (async () => {
+        const model = await mobilenet.load();
+        const status = document.getElementById('status');
+        const video = document.getElementById('video'); // Get the video element
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+
+        try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+                audio: false,
+                video: {
+                    facingMode: 'environment'
+                }
+            });
+
+            video.srcObject = stream;
+            video.play(); // Start playing the video immediately
+            predict();
+        } catch (error) {
+            console.error('Error accessing camera:', error);
+        }
+
+        async function predict() {
+            requestAnimationFrame(async () => {
+                context.drawImage(video, 0, 0, 550, 500);
+
+                // Classify the content of the canvas (video frame)
+                const predictions = await model.classify(canvas);
+
+                // Update the prediction container
+                const predictionContainer = document.getElementById('prediction-container');
+                predictionContainer.innerHTML = `Prediction: ${predictions[0].className}`;
+
+                // Continue the prediction loop
+                predict();
+            });
+        }
+    })();
+</script>
+</body>
+</html>
+

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JARVIS</title>
+    <link rel="icon" type="image/png" href="images/jlogo.png">
+    <style>
+        body {
+            background-color: #102D94;
+            margin: 0; /* Remove default margin */
+        }
+
+        .circle {
+            width: 300px;
+            height: 300px;
+            background: #0D2076;
+            margin: auto; /* Center horizontally */
+            position: absolute;
+            top: 45%; /* Move it down to 50% from the top */
+            left: 50%; /* Move it left to 50% from the left */
+            transform: translate(-50%, -50%); /* Center it precisely */
+            border-radius: 50%;
+            box-shadow: 0px 0px 20px #1d548b, 0px 0px 40px #1d548b, 0px 0px 40px #1d548b;
+        }
+
+        .jmain {
+            color: white;
+            font-size: 40px;
+            text-decoration: none !important;
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            text-align: center; /* Center text horizontally */
+            font-family: "Montserrat";
+            left: 22%;
+            
+        }
+
+        .footer {
+            background-color: #213ba3aa;
+            height: 35px;
+            width: 100%;
+            position: fixed;
+            bottom: 0;
+        }
+    </style>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&display=swap">
+    <link rel="stylesheet" href="jarvis styles/jarvis.css">
+</head>
+<body>
+    <div class="circle">
+            <a href="jarvis.html" class="jmain">Activate</a>
+    </div>
+    <div class="footer"></div>
+</body>
+</html>
